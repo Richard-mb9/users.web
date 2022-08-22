@@ -7,10 +7,11 @@ interface IProps {
     pageSize?: number;
     checkboxSelection?: boolean;
     style?: CSSProperties;
+    isLoading?: boolean
 }
 
 export default function Table(props: IProps) {
-    const { data, columns, checkboxSelection} = props;
+    const { data, columns, checkboxSelection, isLoading} = props;
     const pageSize = props.pageSize || 20
     const style = props.style || { height: 'calc(100vh - 220px)', width: '100%' }
   return (
@@ -21,6 +22,7 @@ export default function Table(props: IProps) {
         pageSize={pageSize}
         rowsPerPageOptions={[5]}
         checkboxSelection={checkboxSelection}
+        loading={isLoading}
       />
     </div>
   );

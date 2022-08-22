@@ -7,12 +7,9 @@ import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import IconButton from '@mui/material/IconButton';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import InputBase from '@mui/material/InputBase';
-import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 
-import InputSearch from "../../../../../components/InputSearch";
 import Select from "../../../../../components/Select";
 import { IUsersFilters } from "../../../../../../integrations/authApi/users";
 import { IProfile } from "../../../../../../integrations/authApi/profiles";
@@ -24,24 +21,26 @@ interface IProps {
 }
 
 export default function SwipeableTemporaryDrawer(props: IProps) {
-  const [open, setOpen] = useState(true);
   const { profiles, onChangeFilters, filters } = props;
 
-  const toggleDrawer = (opened: boolean) => (
-    event: React.KeyboardEvent | React.MouseEvent
-  ) => {
-    setOpen(opened);
-  };
+  const [open, setOpen] = useState(false);
+  const [valuesFilters, setValueFilters] = useState<IUsersFilters>(filters)
 
-  const handleChange = (newFilters: IUsersFilters) => {
-    onChangeFilters(newFilters);
+  const search = ()=>{
+    onChangeFilters(valuesFilters)
     setOpen(false);
-  };
+  }
+
+  const handleKeyPress = (key: string)=> {
+    if(key === 'Enter'){
+      search()
+    }
+  }
 
   return (
     <div>
       <IconButton 
-        onClick={toggleDrawer(true)}
+        onClick={()=>setOpen(true)}
         color="primary"
         style={{border: 'solid 1px', borderRadius: 2}}
         size={'small'}
@@ -52,14 +51,15 @@ export default function SwipeableTemporaryDrawer(props: IProps) {
       <SwipeableDrawer
         anchor={"right"}
         open={open}
-        onClose={toggleDrawer(false)}
-        onOpen={toggleDrawer(true)}
+        onClose={()=>setOpen(false)}
+        onOpen={()=>setOpen(true)}
       >
         <Box role="presentation">
           <List>
+            <Divider style={{marginTop: 60}}/>
             <ListItem>
               <Select
-                value={filters.profiles || ""}
+                value={valuesFilters.profile || ""}
                 label="Profiles"
                 styles={{ width: 250 }}
                 options={[
@@ -69,12 +69,12 @@ export default function SwipeableTemporaryDrawer(props: IProps) {
                     text: profile.name,
                   })),
                 ]}
-                onChange={(value) => handleChange({ profiles: value })}
+                onChange={(value) => setValueFilters({ ...valuesFilters, profile: value })}
               />
             </ListItem>
             <ListItem>
               <Select
-                value={filters.enable || ""}
+                value={valuesFilters.enable || ""}
                 label="Estado"
                 styles={{ width: 250 }}
                 options={[
@@ -82,17 +82,20 @@ export default function SwipeableTemporaryDrawer(props: IProps) {
                   { value: true, text: "Ativos" },
                   { value: false, text: "Inativos" },
                 ]}
-                onChange={(value) => handleChange({ enable: value })}
+                onChange={(value) => setValueFilters({ ...valuesFilters, enable: value })}
               />
             </ListItem>
             <ListItem>
             <Grid item xs={12}>
               <TextField
                   fullWidth
+                  value={valuesFilters.email || ''}
                   id="email"
                   label="Email"
                   name="email"
                   style={{width: 250}}
+                  onChange={(event) => setValueFilters({ ...valuesFilters, email: event.target.value })}
+                  onKeyDown={(event)=>handleKeyPress(event.key)}
               />
             </Grid>
             </ListItem>
@@ -100,10 +103,13 @@ export default function SwipeableTemporaryDrawer(props: IProps) {
             <Grid item xs={12}>
               <TextField
                   fullWidth
+                  value={valuesFilters.id || ''}
                   id="id-usuario-imput"
                   label="ID do Usuario"
                   name="id"
                   style={{width: 250}}
+                  onChange={(event) => setValueFilters({ ...valuesFilters, id: event.target.value })}
+                  onKeyDown={(event)=>handleKeyPress(event.key)}
               />
             </Grid>
             </ListItem>
@@ -112,6 +118,7 @@ export default function SwipeableTemporaryDrawer(props: IProps) {
               <Button 
                 variant="outlined"
                 style={{margin: '10px 0'}}
+                onClick={search}
               >
                 Buscar
               </Button>

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -33,7 +33,7 @@ export default function SignIn() {
   const [alertType, setAlertType] = useState<AlertType>('error')
   const [displayAlert, setDisplayAlert] = useState<displayAlertType>('none')
   const [isAuth, setIsAuth] = useState(!!localStorage.getItem('access_token'))
-  const [isloading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const renderAlert = (type: AlertType, text: string) => {
     setTextAlert(text);
@@ -68,6 +68,7 @@ export default function SignIn() {
 
   return  isAuth ? < Navigate to="/users"/> : (
     <ThemeProvider theme={theme}>
+      <PageLoading open={isLoading} />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box

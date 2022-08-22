@@ -126,76 +126,9 @@ export default function Users(props: IProps) {
     getUsers();
   }, [filters]);
 
-  /* return (
-    <>
-      <PageLoading open={isLoading} />
-      <CssBaseline />
-      <NavBar
-        drawerWidth={drawerWidth}
-        handleDrawerToggle={handleDrawerToggle}
-      />
-      <Box
-        display={"flex"}
-        style={{ width: "100%", flexWrap: "wrap", maxWidth: "100vw", alignItems: 'center', marginBottom: '20px' }}
-      >
-        <Box sx={{ marginTop: "10px", marginRight: "20px" }}>
-            <Button
-                style={{ margin: "20px 0"}}
-                variant="outlined"
-                onClick={() => setModalCreateOpen(!modalCreateOpen)}
-                disabled={!hasRole("CREATE_USERS")}
-            >
-                CRIAR USUARIO
-            </Button>
-        </Box>
-        <Box sx={{ marginTop: "10px", marginRight: "20px" }}>
-            <Select 
-                label="Profiles" 
-                options={
-                    [
-                        {value: 'all', text: 'TODOS'},
-                        ...profiles.map((profile)=> ({value: profile.name, text: profile.name})),
-                    ]
-                }
-                onChange={(value)=>handleChangeFilters({'profiles': value})}
-            />
-        </Box>
-        <Box sx={{ marginTop: "10px", marginRight: "20px" }}>
-          <InputSearch
-            styles={{ width: 250, height: 55 }}
-            placeholder="ID do Usuario"
-            onSearch={(value)=>handleChangeFilters({'id': value})}
-          />
-        </Box>
-        <Box sx={{ marginTop: "10px", marginRight: "20px" }}>
-          <InputSearch
-            styles={{ width: 250, height: 55 }}
-            placeholder="email"
-            onSearch={(value)=>handleChangeFilters({'email': value})}
-          />
-        </Box>
-        <Box sx={{ marginTop: "10px", marginRight: "20px" }}>
-          <Select 
-            label="Estado"
-            options={[{value: 'all', text: 'Todos'}, {value: true, text: 'Ativos'}, {value: false, text: 'Inativos'}]}
-            onChange={(value)=>handleChangeFilters({'enable': value})}
-        />
-        </Box>
-      </Box>
-      <Table data={users} columns={columns} pageSize={20}/>
-      <ModalEdit
-        open={modalEditOpen}
-        setOpen={setModalEditOpen}
-        user={userSelected}
-        setUpdateUserProfiles={handleUpdateUserProfile}
-      />
-      <ModalCreate open={modalCreateOpen} setOpen={setModalCreateOpen} />
-    </>
-  ); */
-
   return (
     <>
-      <PageLoading open={isLoading} />
+      <PageLoading open={isLoading} /> 
       <CssBaseline />
       <NavBar
         drawerWidth={drawerWidth}
@@ -229,7 +162,7 @@ export default function Users(props: IProps) {
             />
         </Box>
       </Box>
-      <Table data={users} columns={columns} pageSize={20}/>
+      <Table data={users} columns={columns} pageSize={50}/>
       <ModalEdit
         open={modalEditOpen}
         setOpen={setModalEditOpen}

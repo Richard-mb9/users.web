@@ -42,7 +42,7 @@ export default function BasicSelect(props: IProps) {
                 style={{...styles}}
             >
                 {options.map((option)=> (
-                    <MenuItem value={option.value.toString()}>{option.text}</MenuItem>)
+                    <MenuItem key={option.value.toString()} value={option.value.toString()}>{option.text}</MenuItem>)
                 )}
             </Select>
         </FormControl>

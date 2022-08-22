@@ -12,7 +12,7 @@ export interface IUsersFilters {
     page_size?: number;
     id?: string;
     email?: string;
-    profiles?: string;
+    profile?: string;
     enable?: string;
 }
 
@@ -35,10 +35,17 @@ export async function createUser(user: ICreateUser){
 }
 
 export async function listUsers(filters: IUsersFilters = {}): Promise<IUser[]>{
+    const keysForRemove = (Object.keys(filters) as (keyof typeof filters)[])
+    .filter((key)=> filters[key] === '')
+
+    keysForRemove.forEach((key)=> {
+        delete filters[key]
+    })
+    
     return (await API.get(
         '/users',
         {
-            params: filters
+            params: JSON.parse(JSON.stringify(filters))
         }
     )).data
 }
