@@ -22,7 +22,7 @@ interface IProps {
 
 export default function Profiles(props: IProps){
     const [modalEditOpen, setModalEditOpen] = useState(false);
-    const [modalCreateOpen, setModalCreateOpen] = useState(false);
+    const [modalCreateOpen, setModalCreateOpen] = useState(true);
     const [profiles, setProfiles] = useState<IProfile[]>([]);
     const [profileSelected, setProfileSelected] = useState<IProfile>()
     const [isLoading, setIsloading] = useState(false)

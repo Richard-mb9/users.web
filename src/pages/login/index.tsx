@@ -23,7 +23,7 @@ import PageLoading from '../components/PageLoading';
 const theme = createTheme();
 
 type AlertType = 'error' | 'warning' | 'info' | 'success';
-type displayAlertType = 'none' | 'block';
+type displayAlertType = 'none' | 'flex';
 
 
 export default function SignIn() {
@@ -34,15 +34,12 @@ export default function SignIn() {
   const [displayAlert, setDisplayAlert] = useState<displayAlertType>('none')
   const [isAuth, setIsAuth] = useState(!!localStorage.getItem('access_token'))
   const [isLoading, setIsLoading] = useState(false)
-
   const renderAlert = (type: AlertType, text: string) => {
     setTextAlert(text);
     setAlertType(type);
-    setDisplayAlert('block');
+    setDisplayAlert('flex');
   }
-
   const send = async ()=>{
-    setIsLoading(true);
     try{
       const response = await getToken(
         {
@@ -50,6 +47,7 @@ export default function SignIn() {
           password: password
         }
       )
+      
       if(response.status === 200){
         localStorage.setItem('access_token', response.data.access_token)
         setIsAuth(true);
@@ -57,8 +55,11 @@ export default function SignIn() {
       }
     }
     catch (error: unknown){
-      if(axios.isAxiosError(error)){
-        if( error.response && error.response.status >= 400 && error.response.status < 500 ){
+      if(axios.isAxiosError(error) && error.response){
+        if(error.response.status == 403){
+          renderAlert('error', 'Usuario temporariamente bloqueado por excesso de tentativas, tente novamente após 10 minutos');
+        }
+        else if(error.response.status >= 400 && error.response.status < 500 ){
           renderAlert('error', 'verfique suas credenciais');
         }
       }
@@ -85,8 +86,8 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Login
           </Typography>
-          <Box display={displayAlert}>
-            <Alert severity={alertType}>{textAlert}</Alert>
+          <Box >
+            <Alert sx={{display: displayAlert }} severity={alertType}>{textAlert}</Alert>
           </Box>
           <Box sx={{ mt: 1 }}>
             <TextField
@@ -100,6 +101,9 @@ export default function SignIn() {
               autoFocus
               value={email}
               onChange={(event)=>setEmail(event.target.value)}
+              inputProps={{
+                "data-test-id": "input-email",
+              }}
             />
             <TextField
               margin="normal"
@@ -112,6 +116,9 @@ export default function SignIn() {
               autoComplete="current-password"
               value={password}
               onChange={(event)=>setPassword(event.target.value)}
+              inputProps={{
+                "data-testid": "input-password",
+              }}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -122,6 +129,7 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
               onClick={()=>send()}
+              data-testid="button-login"
             >
               Login
             </Button>

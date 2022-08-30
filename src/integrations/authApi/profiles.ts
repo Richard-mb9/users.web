@@ -4,6 +4,7 @@ import API from './baseApi';
 export interface IProfile {
     id: number;
     name: string;
+    role_id?: number;
 }
 
 interface IUpdateProfile {
@@ -11,16 +12,20 @@ interface IUpdateProfile {
     roles_ids: number[];
 }
 
-interface ICreateProfileResponse {
-    id: number;
+
+interface ICreateProfile {
+    profileName: string;
+    roleName?: string;
 }
+
 
 export async function listProfiles(): Promise<IProfile[]>{
     return (await API.get('/profiles')).data
 }
 
-export async function createProfile(profileName: string){
-    return await API.post('/profiles', {name: profileName})
+export async function createProfile(data: ICreateProfile){
+    const dataForCreate = JSON.parse(JSON.stringify({name: data.profileName, role_name: data.roleName}))
+    return await API.post('/profiles', dataForCreate)
 }
 
 export async function listProfileRoles(profileId: number){

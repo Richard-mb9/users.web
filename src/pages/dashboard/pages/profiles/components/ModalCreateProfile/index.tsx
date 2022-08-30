@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
@@ -9,6 +9,9 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Alert from '@mui/material/Alert';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 import axios from 'axios';
 
 import { createProfile, IProfile } from '../../../../../../integrations/authApi/profiles';
@@ -40,11 +43,15 @@ interface IProps {
 export default function (props: IProps) {
     const [name, setName] = useState<string>('')
     const [nameError, setNameError] = useState(false)
+    const [createPermission, setCreatePermission] = useState(false)
+    const [roleName, setRoleName] = useState<string | undefined>()
     const [textAlert, setTextAlert] = useState<string>('')
     const [alertType, setAlertType] = useState<AlertType>('error')
     const [displayAlert, setDisplayAlert] = useState<displayAlertType>('none')
-
+    
     const { open, setOpen, profiles, setProfiles } = props;
+    const defaultPrefixRoleName = "CREATE_USER_WITH_PROFILE";
+
 
     const renderAlert = (type: AlertType, text: string) => {
         setTextAlert(text);
@@ -62,21 +69,22 @@ export default function (props: IProps) {
         return isValid
     }
 
-    const validate = ()=>{
-        if(!validateFields()) return false
-        return true
+    const handleInputProfileName = (event: ChangeEvent<HTMLInputElement>)=>{
+        setName(event.target.value)
+        if(createPermission){
+            setRoleName(`${defaultPrefixRoleName}_${event.target.value}`.toUpperCase())
+        }
     }
 
     const handleListProfiles = (id_profile: number)=>{
-        const oldProfiles = profiles;
         const newProfiles = [...profiles, {id: id_profile, name}]
         setProfiles(newProfiles)
     }
 
     const save = async ()=>{
-        if(!validate()) return
+        if(!validateFields()) return
         try{
-            const response = await createProfile(name)
+            const response = await createProfile({profileName: name, roleName})
             if(response.status === 201){
                 renderAlert('success', 'Perfil Cadastrado com sucesso');
                 handleListProfiles(response.data.id)
@@ -102,7 +110,7 @@ export default function (props: IProps) {
 
     useEffect(()=>{
         if(nameError){
-            if(validate()){
+            if(validateFields()){
                 setDisplayAlert('none')
             }
         }
@@ -110,6 +118,15 @@ export default function (props: IProps) {
             setDisplayAlert('none')
         }
     }, [name])
+
+    useEffect(()=>{
+        if(!createPermission){
+            setRoleName(undefined);
+        }
+        else {
+            setRoleName(`${defaultPrefixRoleName}_${name}`.toUpperCase())
+        }
+    }, [createPermission])
 
 
     return (
@@ -149,8 +166,21 @@ export default function (props: IProps) {
                                         name="name"
                                         autoComplete="name"
                                         value={name}
-                                        onChange={(event)=>setName(event.target.value)}
+                                        onChange={handleInputProfileName}
                                     />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <FormControlLabel control={<Checkbox defaultChecked  checked={createPermission} onChange={()=>setCreatePermission(!createPermission)}/>} label="Sera necessario permissão especial para criar usuarios com este perfil" />
+                                    {
+                                        createPermission && (<>
+                                            <Typography component="h6" sx={{marginTop: "20px"}}>
+                                                Será criada a seguinte permissão
+                                            </Typography>
+                                            <Typography component="h1" variant="overline" sx={{textAlign: "center", marginTop: "10px"}}>
+                                                {roleName}
+                                            </Typography>
+                                        </>)
+                                    }
                                 </Grid>
                             </Grid>
                         </Box>
