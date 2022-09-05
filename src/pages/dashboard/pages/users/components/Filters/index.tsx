@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 
 import Select from "../../../../../components/Select";
 import { IUsersFilters } from "../../../../../../integrations/authApi/users";
@@ -52,7 +53,7 @@ export default function SwipeableTemporaryDrawer(props: IProps) {
         anchor={"right"}
         open={open}
         onClose={()=>setOpen(false)}
-        onOpen={()=>setOpen(true)}
+        onOpen={()=>{setOpen(true)}}
       >
         <Box role="presentation">
           <List>

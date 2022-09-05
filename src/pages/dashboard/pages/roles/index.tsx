@@ -13,19 +13,26 @@ import ModalCreateRole from './components/ModalCreateRole';
 import ModalEditRole from './components/ModalEditRole';
 import { hasRole } from '../../../../utils/security';
 import PageLoading from '../../../components/PageLoading';
-import Notification  from '../../../components/Notification';
 import { useSnackbar } from '../../../../context/notification/useSnackbar';
 import axios from 'axios';
 
 
-export default function Roles(){
+interface IProps {
+    drawerWidth: number;
+    handleDrawerToggle: ()=>void;
+}
+
+export default function Roles(props: IProps){
     const [modalEditOpen, setModalEditOpen] = useState(false);
     const [modalCreateOpen, setModalCreateOpen] = useState(false);
     const [roles, setRoles] = useState<IRole[]>([]);
-    const [roleSelected, setRoleSelected] = useState<IRole>()
+    const [roleSelected, setRoleSelected] = useState<IRole>();
     const [isLoading, setIsloading] = useState(false);
+    const [valueSearch, setValueSearch] = useState('');
+    
+    const [openSnackbar] = useSnackbar();
 
-    const [openSnackbar] = useSnackbar()
+    const {drawerWidth, handleDrawerToggle} = props;
 
     const handleModalEditOpen = (role: IRole) =>{
         setModalEditOpen(!modalEditOpen)
@@ -55,7 +62,7 @@ export default function Roles(){
     const getRoles = async ()=>{
         setIsloading(true);
         try{
-            const list = await listRoles()
+            const list = valueSearch ? await listRoles({name: valueSearch}) : await listRoles();
             setRoles(list.data || [])
         }
         catch (error: unknown){
@@ -69,6 +76,10 @@ export default function Roles(){
         setIsloading(false)
     }
 
+    const onSearch = ()=>{
+        getRoles()
+    }
+
     useEffect( ()=>{
         getRoles()
     }, [])
@@ -77,6 +88,13 @@ export default function Roles(){
         <>
             <PageLoading  open={isLoading}/>
             <CssBaseline />
+            <NavBar 
+                drawerWidth={drawerWidth} 
+                handleDrawerToggle={handleDrawerToggle} 
+                valueSearch={valueSearch}
+                handleChangeValueSearch={(event)=>setValueSearch(event.target.value)}
+                onSearch={onSearch}
+            />
             <Button 
                 style={{marginBottom: 20}} 
                 variant="outlined"

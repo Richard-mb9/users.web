@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import IconButton from '@mui/material/IconButton';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
@@ -22,10 +22,11 @@ interface IProps {
 
 export default function Profiles(props: IProps){
     const [modalEditOpen, setModalEditOpen] = useState(false);
-    const [modalCreateOpen, setModalCreateOpen] = useState(true);
+    const [modalCreateOpen, setModalCreateOpen] = useState(false);
     const [profiles, setProfiles] = useState<IProfile[]>([]);
-    const [profileSelected, setProfileSelected] = useState<IProfile>()
-    const [isLoading, setIsloading] = useState(false)
+    const [profileSelected, setProfileSelected] = useState<IProfile>();
+    const [isLoading, setIsloading] = useState(false);
+    const [valueSearch, setValueSearch] = useState('');
 
     const {drawerWidth, handleDrawerToggle} = props;
 
@@ -61,9 +62,13 @@ export default function Profiles(props: IProps){
 
     const getProfiles = async ()=>{
         setIsloading(true);
-        const list = await listProfiles();
+        const list = valueSearch ? await listProfiles({name: valueSearch}) : await listProfiles();
         setProfiles(list);
         setIsloading(false)
+    }
+
+    const onSearch = ()=>{
+        getProfiles()
     }
 
     useEffect( ()=>{
@@ -74,7 +79,13 @@ export default function Profiles(props: IProps){
         <>
             <PageLoading open={isLoading}/>
             <CssBaseline />
-            <NavBar drawerWidth={drawerWidth} handleDrawerToggle={handleDrawerToggle} valueSearch={''}/>
+            <NavBar 
+                drawerWidth={drawerWidth} 
+                handleDrawerToggle={handleDrawerToggle} 
+                valueSearch={valueSearch}
+                handleChangeValueSearch={(event)=> setValueSearch(event.target.value)}
+                onSearch={onSearch}
+            />
             <Button 
                 style={{marginBottom: 20}} 
                 variant="outlined"

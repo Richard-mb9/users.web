@@ -18,8 +18,15 @@ interface ICreateProfile {
     roleName?: string;
 }
 
+interface IListProfilesParams {
+    name?: string;
+}
 
-export async function listProfiles(): Promise<IProfile[]>{
+
+export async function listProfiles(params?: IListProfilesParams): Promise<IProfile[]>{
+    if(params){
+        return (await API.get('/profiles', {params})).data
+    }
     return (await API.get('/profiles')).data
 }
 

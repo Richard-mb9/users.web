@@ -24,8 +24,6 @@ import ModalEdit from "./components/ModalEditUser";
 import ModalCreate from "./components/ModalCreateUser";
 import { hasRole } from "../../../../utils/security";
 import PageLoading from "../../../components/PageLoading";
-import Select from "../../../components/Select";
-import InputSearch from "../../../components/InputSearch";
 import Filters from './components/Filters';
 
 interface IProps {

@@ -10,13 +10,17 @@ interface IUpdateRole {
     name: string;
 }
 
+interface IListRolesParams {
+    name?: string;
+}
+
 interface IListRolesResponse {
     data?: IRole[];
     status: number;
 }
 
-export async function listRoles(){
-    return await API.get('/roles')
+export async function listRoles(params?: IListRolesParams){
+    return await API.get('/roles', {params})
 } 
 
 

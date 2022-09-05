@@ -29,7 +29,7 @@ export default function ResponsiveDrawer(props: any) {
                 <Routes>
                     <Route element={<Users drawerWidth={drawerWidth} handleDrawerToggle={handleDrawerToggle}/>} path={`/users`}/>
                     <Route element={<Profiles drawerWidth={drawerWidth} handleDrawerToggle={handleDrawerToggle}/>} path='/profiles'/>
-                    <Route element={<Roles/>} path='/roles'/>
+                    <Route element={<Roles drawerWidth={drawerWidth} handleDrawerToggle={handleDrawerToggle} />} path='/roles'/>
                 </Routes>
                 
             </Box>

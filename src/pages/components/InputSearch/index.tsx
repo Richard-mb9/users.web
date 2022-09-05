@@ -1,4 +1,4 @@
-import React, { CSSProperties, useState, ChangeEvent } from 'react';
+import React, { CSSProperties, FormEvent, ChangeEvent } from 'react';
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
@@ -9,24 +9,14 @@ interface IProps {
   value: string;
   styles?: CSSProperties;
   placeholder?: string;
-  onSearch?: (value: string) => void;
-  onChange?: (value: string) => void;
+  onSearch?: () => void;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   onSelect?: ()=> void;
 }
 
 
 export default function CustomizedInputBase(props: IProps) {
-  const [value, setValue] = useState(props.value)
-
-  const { styles, placeholder, onChange, onSearch, onSelect } = props;
-
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) =>{
-    if(onChange){
-      onChange(event.target.value);
-    }
-    setValue(event.target.value);
-    
-  }
+  const { styles, placeholder, onChange, onSearch, onSelect, value } = props;
 
   const handleOnselect = (event: ChangeEvent<HTMLInputElement>) =>{
     if(onSelect){
@@ -36,7 +26,7 @@ export default function CustomizedInputBase(props: IProps) {
 
   const handleSearch = ()=> {
     if(onSearch){
-      onSearch(value);
+      onSearch();
     }
   }
   
@@ -44,13 +34,14 @@ export default function CustomizedInputBase(props: IProps) {
     <Paper
       component="form"
       sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400, ...styles }}
+      onSubmit={(e: FormEvent<HTMLFormElement>)=>{e.preventDefault(); handleSearch()}}
     >
       <InputBase
         sx={{ ml: 1, flex: 1 }}
         placeholder={placeholder || "Procurar"}
         inputProps={{ 'aria-label': 'Procurar' }}
         value={value}
-        onChange={handleChange}
+        onChange={onChange}
         onSelect={handleOnselect}
       />
       <IconButton onClick={handleSearch} sx={{ p: '10px' }} aria-label="search">

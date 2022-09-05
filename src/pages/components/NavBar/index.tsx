@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ChangeEvent} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
@@ -14,12 +14,14 @@ import InputSearch from '../InputSearch';
 interface IProps {
     drawerWidth: number;
     handleDrawerToggle: ()=>void;
+    handleChangeValueSearch: (event: ChangeEvent<HTMLInputElement>)=>void;
+    onSearch: ()=>void;
     valueSearch: string;
 }
 
 
 export default function(props: IProps){
-    const {drawerWidth, handleDrawerToggle, valueSearch} = props;
+    const {drawerWidth, handleDrawerToggle, valueSearch, handleChangeValueSearch, onSearch} = props;
 
     return (
         <>
@@ -48,7 +50,7 @@ export default function(props: IProps){
                     >
                         AUTH
                     </Typography>
-                    <InputSearch onChange={()=>{}} value={valueSearch}/>
+                    <InputSearch onChange={handleChangeValueSearch} value={valueSearch} onSearch={onSearch}/>
                 </Toolbar>
             </AppBar>
             <Toolbar />
