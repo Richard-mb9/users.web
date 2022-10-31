@@ -20,7 +20,7 @@ export default function Table(props: IProps) {
         rows={data}
         columns={columns}
         pageSize={pageSize}
-        rowsPerPageOptions={[5]}
+        rowsPerPageOptions={[pageSize]}
         checkboxSelection={checkboxSelection}
         loading={isLoading}
       />

@@ -27,7 +27,7 @@ export default function Roles(props: IProps){
     const [modalCreateOpen, setModalCreateOpen] = useState(false);
     const [roles, setRoles] = useState<IRole[]>([]);
     const [roleSelected, setRoleSelected] = useState<IRole>();
-    const [isLoading, setIsloading] = useState(false);
+    const [isLoading, setLoading] = useState(false);
     const [valueSearch, setValueSearch] = useState('');
     
     const [openSnackbar] = useSnackbar();
@@ -50,17 +50,21 @@ export default function Roles(props: IProps){
             ),
         },
         {
-            field: 'edit',
+            field: 'Editar',
+            width: 85,
             renderCell: (params: GridValueGetterParams) => (
-                <IconButton onClick={()=>handleModalEditOpen(params.row)}>
-                    <ModeEditOutlineOutlinedIcon color='primary'/>
-                </IconButton>
+                <div style={{display: 'flex', justifyContent: 'center', width: '100%'}}>
+                    <IconButton onClick={()=>handleModalEditOpen(params.row)}>
+                        <ModeEditOutlineOutlinedIcon color='primary'/>
+                    </IconButton>
+                </div>
+                
             ),
         }
     ];
 
     const getRoles = async ()=>{
-        setIsloading(true);
+        setLoading(true);
         try{
             const list = valueSearch ? await listRoles({name: valueSearch}) : await listRoles();
             setRoles(list.data || [])
@@ -73,7 +77,7 @@ export default function Roles(props: IProps){
                 }
             }
         }
-        setIsloading(false)
+        setLoading(false)
     }
 
     const onSearch = ()=>{

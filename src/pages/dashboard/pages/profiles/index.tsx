@@ -49,13 +49,16 @@ export default function Profiles(props: IProps){
     
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'name', headerName: 'Nome', width: 200 },
+        { field: 'name', headerName: 'Nome', width: 150 },
         {
-            field: 'edit',
+            field: 'Editar',
+            width: 70,
             renderCell: (params: GridValueGetterParams) => (
-                <IconButton onClick={()=>handleModalEditOpen(params.row)}>
-                    <ModeEditOutlineOutlinedIcon color='primary'/>
-                </IconButton>
+                <div style={{display: 'flex', justifyContent: 'center', width: '100%'}}>
+                    <IconButton onClick={()=>handleModalEditOpen(params.row)}>
+                        <ModeEditOutlineOutlinedIcon color='primary'/>
+                    </IconButton>
+                </div>
             ),
         }
     ];
