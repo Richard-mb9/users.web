@@ -2,7 +2,7 @@ import React, { useState, useEffect, ChangeEvent } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import IconButton from '@mui/material/IconButton';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
-import { GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 
 import {listProfiles, IProfile} from '../../../../integrations/authApi/profiles';
@@ -53,7 +53,7 @@ export default function Profiles(props: IProps){
         {
             field: 'Editar',
             width: 70,
-            renderCell: (params: GridValueGetterParams) => (
+            renderCell: (params: GridRenderCellParams) => (
                 <div style={{display: 'flex', justifyContent: 'center', width: '100%'}}>
                     <IconButton onClick={()=>handleModalEditOpen(params.row)}>
                         <ModeEditOutlineOutlinedIcon color='primary'/>
