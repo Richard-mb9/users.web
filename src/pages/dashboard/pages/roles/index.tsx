@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import IconButton from '@mui/material/IconButton';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
-import { GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
 
@@ -43,7 +43,7 @@ export default function Roles(props: IProps){
         { field: 'id', headerName: 'ID', width: 70 },
         {
             field: 'name', headerName: 'Nome', width: 150,
-            renderCell: (params: GridValueGetterParams) => (
+            renderCell: (params: GridRenderCellParams) => (
                 <Tooltip title={params.value}>
                     <span>{params.value}</span>
                 </Tooltip>
@@ -52,7 +52,7 @@ export default function Roles(props: IProps){
         {
             field: 'Editar',
             width: 85,
-            renderCell: (params: GridValueGetterParams) => (
+            renderCell: (params: GridRenderCellParams) => (
                 <div style={{display: 'flex', justifyContent: 'center', width: '100%'}}>
                     <IconButton onClick={()=>handleModalEditOpen(params.row)}>
                         <ModeEditOutlineOutlinedIcon color='primary'/>

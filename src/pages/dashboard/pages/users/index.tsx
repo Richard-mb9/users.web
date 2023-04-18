@@ -6,7 +6,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Box from "@mui/material/Box";
 
-import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
 
 import {
@@ -82,7 +82,7 @@ export default function Users(props: IProps) {
       field: "enable",
       headerName: "ativo",
       width: 120,
-      renderCell: (params: GridValueGetterParams) => (
+      renderCell: (params: GridRenderCellParams) => (
         <FormControlLabel
           control={<Switch checked={params.row.enable ? true : false} />}
           label={`${params.row.enable ? "Ativo" : "Inativo"}`}
@@ -93,7 +93,7 @@ export default function Users(props: IProps) {
     },
     {
       field: "editar",
-      renderCell: (params: GridValueGetterParams) => (
+      renderCell: (params: GridRenderCellParams) => (
         <IconButton onClick={() => handleModalEditOpen(params.row)}>
           <ModeEditOutlineOutlinedIcon color="primary" />
         </IconButton>
